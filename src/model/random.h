@@ -1,6 +1,6 @@
 #include <random>
 
-class Random {
+class RandomBoolean {
  public:
   bool operator()() {
     std::random_device rd;

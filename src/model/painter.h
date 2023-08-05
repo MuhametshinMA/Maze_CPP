@@ -7,11 +7,13 @@
 
 class Painter {
  public:
-  explicit Painter(std::reference_wrapper<type_maze> maze);
-  void PrintMaze(bool print_set = false);
+  // explicit Painter();
+  void PrintMaze(type_maze &maze_, bool print_set = false);
+  void PrintMazeString(size_t index, type_maze &maze_, bool print_set = false);
+  void PrintNordWalls(type_maze &maze_);
 
- private:
-  type_maze& maze_;
+  //  private:
+  //   type_maze& maze_;
 };
 
 #endif  // A1_MAZE_0_MODEL_PAINTER_H

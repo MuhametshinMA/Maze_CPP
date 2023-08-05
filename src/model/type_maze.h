@@ -14,3 +14,4 @@ struct type_maze {
 };
 
 #endif  // A1_MAZE_0_MODEL_TYPE_MAZE_H
+ 
