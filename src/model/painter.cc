@@ -46,13 +46,13 @@ void Painter::PrintMazeString(size_t index, type_maze &maze_, bool print_set) {
 
   auto it = maze_.maze.second;
   auto it_col = it.begin();
-
+  std::cout << "|";
   for (size_t j = 0; j < maze_.maze.first[index].size(); ++j) {
     if (print_set) {
       if (maze_.maze.second[index][j]) {
-        std::cout << "_" << maze_.set.at(j) << "_";
+        std::cout << "_" << maze_.temp_set.at(j) << "_";
       } else {
-        std::cout << " " << maze_.set.at(j) << " ";
+        std::cout << " " << maze_.temp_set.at(j) << " ";
       }
     } else {
       if (maze_.maze.second[index][j]) {
@@ -68,14 +68,11 @@ void Painter::PrintMazeString(size_t index, type_maze &maze_, bool print_set) {
     }
   }
   std::cout << "\n";
-
-  // for (auto i : maze_.set) std::cout << i << " ";
-  // std::cout << "\n";
-  // std::cout << maze_.set.size() << "\n";
 }
 
 void Painter::PrintNordWalls(type_maze &maze_) {
-    for (size_t i = 0; i < maze_.maze.first.size(); ++i) {
+  std::cout << " ";
+  for (size_t i = 0; i < maze_.maze.first.size(); ++i) {
     std::cout << "___ ";
   }
   std::cout << "\n";

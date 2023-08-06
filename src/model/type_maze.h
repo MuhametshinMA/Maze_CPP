@@ -11,7 +11,7 @@ struct type_maze {
   size_t col;
   matriсes maze;
   set_matrix set;
+  set_matrix temp_set;
 };
 
 #endif  // A1_MAZE_0_MODEL_TYPE_MAZE_H
- 
