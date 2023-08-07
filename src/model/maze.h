@@ -24,9 +24,9 @@ class Maze {
   void SetWestWalls(size_t index);
   void SetSouthWalls(size_t index);
   void CopyWalls(size_t index);
-  void DeleteFromSetWithSouthWalls(size_t index);
   void SetUniqueSet(size_t index);
-  
+  void JoinSet(size_t index);
+  void SetLastWalls();
 };
 
 #endif  // A1_MAZE_0_MODEL_MAZE_H

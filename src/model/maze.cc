@@ -9,50 +9,15 @@ Maze::Maze(size_t row, size_t col) : maze_{row, col} {
 
 void Maze::GenerateIdealMaze() {
   painter_->PrintNordWalls(maze_);
-  SetUniqueSet(0);
-  SetWestWalls(0);
-  SetSouthWalls(0);
-  painter_->PrintMazeString(0, maze_, true);
-  std::cout << "\n";
-
-  CopyWalls(0);
-  painter_->PrintMazeString(1, maze_, true);
-  SetUniqueSet(1);
-  // painter_->PrintMazeString(1, maze_, true);
-  SetWestWalls(1);
-  // painter_->PrintMazeString(1, maze_, true);
-  SetSouthWalls(1);
-  painter_->PrintMazeString(1, maze_, true);
-
-  std::cout << "\n";
-
-  CopyWalls(1);
-  painter_->PrintMazeString(2, maze_, true);
-  SetUniqueSet(2);
-  // painter_->PrintMazeString(2, maze_, true);
-  SetWestWalls(2);
-  // painter_->PrintMazeString(2, maze_, true);
-  SetSouthWalls(2);
-  painter_->PrintMazeString(2, maze_, true);
-
-  // for (size_t i = 0; i < maze_.temp_set.size(); ++i) {
-  //   std::cout << maze_.temp_set.at(i) << " ";
-  // }
-  // std::cout << "\n";
-  // for (size_t i = 0; i < maze_.set.size(); ++i) {
-  //   std::cout << maze_.set.at(i) << " ";
-  // }
-
-  // for (size_t i = 0; i < maze_.col; ++i) {
-  //   if (i > 0) {
-  //     CopyWalls(i - 1);
-  //     SetUniqueSet(i);
-  //     SetWestWalls(i);
-  //     SetSouthWalls(i);
-  //     painter_->PrintMazeString(i, maze_);
-  //   }
-  // }
-  painter_->PrintMaze(maze_);
+  for (size_t i = 0; i < maze_.col - 1; ++i) {
+    SetUniqueSet(i);
+    SetWestWalls(i);
+    SetSouthWalls(i);
+    CopyWalls(i);
+    painter_->PrintMazeString(i, maze_);
+  }
+  SetLastWalls();
+  painter_->PrintMazeString(maze_.col - 1, maze_);
 }
 
 type_maze& Maze::GetMaze() { return maze_; }
@@ -89,7 +54,7 @@ void Maze::SetWestWalls(size_t index) {
     }
     // join set
     if (!maze_.maze.first[index][i] && (i + 1) < maze_.row) {
-      maze_.temp_set.at(i + 1) = maze_.temp_set.at(i);
+      JoinSet(i);
     }
     // join set
   }
@@ -132,6 +97,15 @@ void Maze::SetSouthWalls(size_t index) {
         changed_set = true;
         continue;
       }
+    } else {
+      if (was_door) {
+        if (random_boolean()) {
+          SetWall(index, i, type_wall::kSouth, true);
+        } else {
+          was_door = true;
+        }
+        // changed_set = true;
+      }
     }
   }
 }
@@ -156,15 +130,6 @@ void Maze::CopyWalls(size_t index) {
   }
 }
 
-void Maze::DeleteFromSetWithSouthWalls(size_t index) {
-  for (size_t i = 0; i < maze_.set.size(); ++i) {
-    if (maze_.maze.second.at(index)[i]) {
-      maze_.set.at(i) = 0;
-      maze_.maze.second.at(index)[i] = false;
-    }
-  }
-}
-
 void Maze::SetUniqueSet(size_t index) {
   size_t size_set = maze_.temp_set.size();
   for (size_t i = 0; i < maze_.temp_set.size(); ++i) {
@@ -185,24 +150,27 @@ void Maze::SetUniqueSet(size_t index) {
       maze_.set.pop_back();
     }
   }
+}
 
-  // for (size_t i = 0; i < maze_.set.size(); ++i) {
-  //   for (size_t j = 0; j < maze_.set.size(); ++j) {
-  //     if (maze_.set.at(i) == maze_.temp_set.at(j)) {
+void Maze::JoinSet(size_t index) {
+  size_t changed_value = maze_.temp_set.at(index + 1);
+  size_t replacement_value = maze_.temp_set.at(index);
+  for (size_t i = 0; i < maze_.temp_set.size(); ++i) {
+    if (changed_value == maze_.temp_set.at(i)) {
+      maze_.temp_set.at(i) = replacement_value;
+    }
+  }
+}
 
-  //     }
-  //   }
-  // }
-  // for (size_t i = 0; i < maze_.set.size(); ++i) {
-  //   if (maze_.set.at(i) == 0) {
-  //     if (i == 0) {
-  //       maze_.set.at(i) = maze_.set.at(i + 1) + 3;
-  //     } else if (i < maze_.set.size() - 1) {
-  //       maze_.set.at(i) = maze_.set.at(i - 1) + 2;
-  //       if (maze_.set.at(i) == maze_.set.at(i + 1)) {
-  //         maze_.set.at(i) -= 1;
-  //       }
-  //     }
-  //   }
-  // }
+void Maze::SetLastWalls() {
+  SetUniqueSet(maze_.col);
+  SetWestWalls(maze_.col - 1);
+  for (size_t i = 0; i < maze_.row; ++i) {
+    maze_.maze.second.at(maze_.col - 1)[i] = true;
+    if ((i < maze_.row - 1) &&
+        (maze_.temp_set.at(i) != maze_.temp_set.at(i + 1))) {
+      maze_.maze.first.at(maze_.row - 1)[i] = false;
+      JoinSet(i);
+    }
+  }
 }

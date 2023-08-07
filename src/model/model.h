@@ -8,8 +8,11 @@
 
 class Model {
  public:
-  Model() : maze_(std::make_unique<Maze>(10, 10))/*, painter_(maze_->GetMaze())*/ {}
-  // void callPrintMaze(bool print_set = false) { painter_.PrintMaze(print_set); }
+  Model()
+      : maze_(std::make_unique<Maze>(20, 20)) /*, painter_(maze_->GetMaze())*/ {
+  }
+  // void callPrintMaze(bool print_set = false) { painter_.PrintMaze(print_set);
+  // }
   void callGenerateIdealMaze() { maze_->GenerateIdealMaze(); }
 
  private:

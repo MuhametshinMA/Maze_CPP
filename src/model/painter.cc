@@ -36,9 +36,6 @@ void Painter::PrintMaze(type_maze &maze_, bool print_set) {
     }
     std::cout << "\n";
   }
-  for (auto i : maze_.set) std::cout << i << " ";
-  std::cout << "\n";
-  std::cout << maze_.set.size() << "\n";
 }
 
 void Painter::PrintMazeString(size_t index, type_maze &maze_, bool print_set) {
