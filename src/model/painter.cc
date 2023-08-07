@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-// Painter::Painter(std::reference_wrapper<type_maze> maze) : maze_(maze) {}
-
 void Painter::PrintMaze(type_maze &maze_, bool print_set) {
   std::string set;
 
@@ -69,7 +67,7 @@ void Painter::PrintMazeString(size_t index, type_maze &maze_, bool print_set) {
 
 void Painter::PrintNordWalls(type_maze &maze_) {
   std::cout << " ";
-  for (size_t i = 0; i < maze_.maze.first.size(); ++i) {
+  for (size_t i = 0; i < maze_.maze.first.at(0).size(); ++i) {
     std::cout << "___ ";
   }
   std::cout << "\n";

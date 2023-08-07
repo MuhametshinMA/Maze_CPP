@@ -2,12 +2,10 @@
 
 #include <iostream>
 
-Maze::Maze(size_t row, size_t col) : maze_{row, col} {
-  painter_ = std::make_unique<Painter>();
-  InitializeMaze();
-}
+Maze::Maze() : maze_{0, 0} { painter_ = std::make_unique<Painter>(); }
 
-void Maze::GenerateIdealMaze() {
+void Maze::GenerateIdealMaze(size_t rows, size_t cols) {
+  InitializeMaze(rows, cols);
   painter_->PrintNordWalls(maze_);
   for (size_t i = 0; i < maze_.col - 1; ++i) {
     SetUniqueSet(i);
@@ -22,21 +20,23 @@ void Maze::GenerateIdealMaze() {
 
 type_maze& Maze::GetMaze() { return maze_; }
 
-void Maze::InitializeMaze() {
+void Maze::InitializeMaze(size_t rows, size_t cols) {
+  maze_.row = rows;
+  maze_.col = cols;
   for (size_t i = 0; i < maze_.row; ++i) {
     maze_.temp_set.push_back(0);
   }
 
-  maze_.maze.first.resize(maze_.row, std::vector<bool>(maze_.col));
-  maze_.maze.second.resize(maze_.row, std::vector<bool>(maze_.col));
+  maze_.maze.first.resize(maze_.col, std::vector<bool>(maze_.row));
+  maze_.maze.second.resize(maze_.col, std::vector<bool>(maze_.row));
 }
 
-void Maze::SetWall(size_t row, size_t col, type_wall wall, bool value) {
+void Maze::SetWall(size_t col, size_t row, type_wall wall, bool value) {
   auto& maze_ref =
       (wall == type_wall::kSouth) ? maze_.maze.second : maze_.maze.first;
 
   if (row < maze_.row && col < maze_.col) {
-    maze_ref[row][col] = value;
+    maze_ref[col][row] = value;
   }
 }
 
@@ -104,7 +104,6 @@ void Maze::SetSouthWalls(size_t index) {
         } else {
           was_door = true;
         }
-        // changed_set = true;
       }
     }
   }
@@ -169,7 +168,7 @@ void Maze::SetLastWalls() {
     maze_.maze.second.at(maze_.col - 1)[i] = true;
     if ((i < maze_.row - 1) &&
         (maze_.temp_set.at(i) != maze_.temp_set.at(i + 1))) {
-      maze_.maze.first.at(maze_.row - 1)[i] = false;
+      maze_.maze.first.at(maze_.col - 1)[i] = false;
       JoinSet(i);
     }
   }

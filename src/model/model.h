@@ -8,15 +8,14 @@
 
 class Model {
  public:
-  Model()
-      : maze_(std::make_unique<Maze>(20, 20)) /*, painter_(maze_->GetMaze())*/ {
-  }
+  Model() : maze_(new Maze()) {}
+  ~Model() { delete maze_; }
   // void callPrintMaze(bool print_set = false) { painter_.PrintMaze(print_set);
   // }
-  void callGenerateIdealMaze() { maze_->GenerateIdealMaze(); }
+  void callGenerateIdealMaze() { maze_->GenerateIdealMaze(5, 5); }
 
  private:
-  std::unique_ptr<Maze> maze_;
+  Maze* maze_;
   // Painter painter_;
 };
 

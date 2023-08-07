@@ -11,15 +11,15 @@ enum class type_wall { kSouth, kWest };
 
 class Maze {
  public:
-  explicit Maze(size_t row, size_t col);
-  void GenerateIdealMaze();
+  Maze();
+  void GenerateIdealMaze(size_t rows, size_t cols);
   type_maze &GetMaze();
 
  private:
   type_maze maze_;
   std::unique_ptr<Painter> painter_;
 
-  void InitializeMaze();
+  void InitializeMaze(size_t rows, size_t cols);
   void SetWall(size_t row, size_t col, type_wall wall, bool value);
   void SetWestWalls(size_t index);
   void SetSouthWalls(size_t index);
